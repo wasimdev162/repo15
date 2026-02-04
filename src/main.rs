@@ -1,9 +1,11 @@
 mod config;
 mod logging;
+mod md;
 
 use anyhow::Result;
 use clap::Parser;
 use config::{Cli, Config};
+use md::MarketDataHandler;
 use std::time::Duration;
 use tokio::time::sleep;
 
@@ -51,11 +53,18 @@ async fn main() -> Result<()> {
 async fn run_trading_system(config: Config) -> Result<()> {
     logging::log_info(
         "system",
-        "Trading system initialized, waiting for market data...",
+        "Trading system initialized, starting market data...",
     );
 
-    // For now, just run for the configured duration
-    // We'll add the actual trading components in subsequent milestones
+    // Start market data handler
+    let _md_handler = MarketDataHandler::start(&config).await?;
+
+    logging::log_info(
+        "system",
+        "Market data handler started successfully",
+    );
+
+    // Run for the configured duration
     let run_duration = Duration::from_secs(config.run_seconds);
     
     logging::log_info(
@@ -63,10 +72,9 @@ async fn run_trading_system(config: Config) -> Result<()> {
         &format!("System will run for {} seconds", config.run_seconds),
     );
 
-    // Simulate running (placeholder for actual trading logic)
+    // Wait for the duration while market data flows
     let start = std::time::Instant::now();
     while start.elapsed() < run_duration {
-        // Placeholder: Log a heartbeat every 5 seconds
         sleep(Duration::from_secs(5)).await;
         logging::log_info(
             "heartbeat",
