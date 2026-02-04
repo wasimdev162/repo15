@@ -4,3 +4,45 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+# CLI and configuration
+clap = { version = "4.5", features = ["derive"] }
+dotenv = "0.15"
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Async runtime
+tokio = { version = "1.35", features = ["full"] }
+tokio-tungstenite = { version = "0.21", features = ["native-tls"] }
+futures-util = "0.3"
+
+# HTTP client
+reqwest = { version = "0.11", features = ["json", "rustls-tls"] }
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["json", "env-filter"] }
+
+# Time handling
+chrono = { version = "0.4", features = ["serde"] }
+
+# Error handling
+anyhow = "1.0"
+thiserror = "1.0"
+
+# Utilities
+uuid = { version = "1.6", features = ["v4", "serde"] }
+rust_decimal = { version = "1.33", features = ["serde-float"] }
+rust_decimal_macros = "1.33"
+
+# Cryptography for API signatures
+hmac = "0.12"
+sha2 = "0.10"
+hex = "0.4"
+
+# Collections
+dashmap = "5.5"
+
+[dev-dependencies]
+approx = "0.5"
