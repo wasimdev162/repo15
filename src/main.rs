@@ -1,11 +1,13 @@
 mod config;
 mod logging;
 mod md;
+mod signals;
 
 use anyhow::Result;
 use clap::Parser;
 use config::{Cli, Config};
 use md::MarketDataHandler;
+use signals::SignalEngine;
 use std::time::Duration;
 use tokio::time::sleep;
 
@@ -57,11 +59,30 @@ async fn run_trading_system(config: Config) -> Result<()> {
     );
 
     // Start market data handler
-    let _md_handler = MarketDataHandler::start(&config).await?;
+    let md_handler = MarketDataHandler::start(&config).await?;
 
     logging::log_info(
         "system",
         "Market data handler started successfully",
+    );
+
+    // Start signal engine
+    let signal_engine = SignalEngine::new(
+        md_handler.orderbook.clone(),
+        md_handler.trades.clone(),
+    );
+    
+    let _signals = signal_engine.get_signals();
+    
+    tokio::spawn(async move {
+        if let Err(e) = signal_engine.start(200).await {
+            logging::log_error("signal_engine", &format!("Signal engine error: {}", e));
+        }
+    });
+
+    logging::log_info(
+        "system",
+        "Signal engine started successfully",
     );
 
     // Run for the configured duration

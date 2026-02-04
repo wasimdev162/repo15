@@ -4,7 +4,7 @@ pub mod types;
 
 pub use bybit_ws::{start_snapshot_logger, BybitWebSocket};
 pub use replay::ReplayHandler;
-pub use types::{OrderBook, Trade};
+pub use types::{OrderBook, Side, Trade};
 
 use anyhow::Result;
 use std::sync::Arc;

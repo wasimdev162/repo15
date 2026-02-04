@@ -3,6 +3,14 @@ name = "algorithmic-trading-system"
 version = "0.1.0"
 edition = "2021"
 
+[[bin]]
+name = "algorithmic-trading-system"
+path = "src/main.rs"
+
+[lib]
+name = "algorithmic_trading_system"
+path = "src/lib.rs"
+
 [dependencies]
 # CLI and configuration
 clap = { version = "4.5", features = ["derive"] }
